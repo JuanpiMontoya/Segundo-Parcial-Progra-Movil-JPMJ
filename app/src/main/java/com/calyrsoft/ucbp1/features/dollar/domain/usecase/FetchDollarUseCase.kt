@@ -7,9 +7,15 @@ import kotlinx.coroutines.flow.Flow
 class FetchDollarUseCase(
     val repository: IDollarRepository
 ) {
-
-
     suspend fun invoke(): Flow<DollarModel> {
         return repository.getDollar()
+    }
+
+    suspend fun getHistory(): List<DollarModel> {
+        return repository.getHistory()
+    }
+
+    suspend fun getLatest(): DollarModel? {
+        return repository.getLatest()
     }
 }

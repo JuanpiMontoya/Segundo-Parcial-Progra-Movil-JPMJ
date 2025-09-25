@@ -11,21 +11,18 @@ interface IDollarDao {
     @Query("SELECT * FROM dollars")
     suspend fun getList(): List<DollarEntity>
 
+    @Query("SELECT * FROM dollars ORDER BY timestamp DESC LIMIT 10")  // NUEVO ✅
+    suspend fun getHistory(): List<DollarEntity>
 
+    @Query("SELECT * FROM dollars ORDER BY timestamp DESC LIMIT 1")   // NUEVO ✅
+    suspend fun getLatest(): DollarEntity?
 
-
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insert(dollar: DollarEntity)
-
-
-
 
     @Query("DELETE FROM dollars")
     suspend fun deleteAll()
 
-
-
-
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertDollars(lists: List<DollarEntity>)
 }

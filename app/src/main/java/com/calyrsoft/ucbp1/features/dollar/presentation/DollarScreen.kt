@@ -4,8 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -78,6 +83,47 @@ fun DollarScreen(viewModelDollar: DollarViewModel = koinViewModel()) {
                         .background(Color.Blue.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
                         .padding(8.dp)
                 )
+
+                Button(
+                    onClick = { viewModelDollar.loadHistory() },
+                    modifier = Modifier.padding(top = 20.dp)
+                ) {
+                    Text("Ver Histórico")
+                }
+            }
+
+            is DollarViewModel.DollarUIState.HistoryLoaded -> {
+                Text(
+                    text = "Histórico de Cambios",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                LazyColumn {
+                    items(stateValue.history) { historyItem ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp, horizontal = 16.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text("Fecha: ${historyItem.fechaActualizacion}")
+                                Text("USD Oficial: ${historyItem.dollarOfficial} Bs.")
+                                Text("USD Paralelo: ${historyItem.dollarParallel} Bs.")
+                                Text("USDT: ${historyItem.USDT} Bs.", color = Color.Magenta)
+                                Text("USDC: ${historyItem.USDC} Bs.", color = Color.Blue)
+                            }
+                        }
+                    }
+                }
+
+                // Botón para volver
+                Button(
+                    onClick = { viewModelDollar.getDollar() },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text("Volver")
+                }
             }
         }
     }

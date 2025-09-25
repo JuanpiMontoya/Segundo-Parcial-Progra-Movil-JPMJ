@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface IDollarRepository {
     suspend fun getDollar(): Flow<DollarModel>
+    suspend fun getHistory(): List<DollarModel>
+    suspend fun getLatest(): DollarModel?
 }

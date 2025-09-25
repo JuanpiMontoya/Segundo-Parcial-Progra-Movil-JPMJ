@@ -7,23 +7,28 @@ import com.calyrsoft.ucbp1.features.dollar.data.mapper.toEntity
 class DollarLocalDataSource(
     val dao: IDollarDao
 ) {
-
-
     suspend fun getList(): List<DollarModel> {
         return dao.getList().map {
             it.toModel()
         }
-
-
     }
+
+    suspend fun getHistory(): List<DollarModel> {
+        return dao.getHistory().map { it.toModel() }
+    }
+
+    suspend fun getLatest(): DollarModel? {
+        return dao.getLatest()?.toModel()
+    }
+
     suspend fun deleteAll() {
         dao.deleteAll()
     }
+
     suspend fun inserTDollars(list: List<DollarModel>) {
         val dollarEntity = list.map { it.toEntity() }
         dao.insertDollars(dollarEntity)
     }
-
 
     suspend fun insert(dollar: DollarModel) {
         dao.insert(dollar.toEntity())

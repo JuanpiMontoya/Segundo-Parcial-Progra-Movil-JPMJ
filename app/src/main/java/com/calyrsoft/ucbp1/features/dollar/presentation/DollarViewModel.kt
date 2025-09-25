@@ -22,6 +22,7 @@ class DollarViewModel(
         object Loading : DollarUIState()
         class Error(val message: String) : DollarUIState()
         class Success(val data: DollarModel) : DollarUIState()
+        class HistoryLoaded(val history: List<DollarModel>) : DollarUIState()
     }
 
     private val _uiState = MutableStateFlow<DollarUIState>(DollarUIState.Loading)
@@ -29,6 +30,17 @@ class DollarViewModel(
 
     init {
         getDollar()
+    }
+
+    fun loadHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val history = fetchDollarUseCase.getHistory()
+                _uiState.value = DollarUIState.HistoryLoaded(history)
+            } catch (e: Exception) {
+                _uiState.value = DollarUIState.Error("Error al cargar histórico: ${e.message}")
+            }
+        }
     }
 
     fun getDollar() {
