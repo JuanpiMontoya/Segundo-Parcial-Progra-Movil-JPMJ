@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.calyrsoft.ucbp1.features.dollar.data.database.entity.DollarEntity
 import com.calyrsoft.ucbp1.features.dollar.data.database.dao.IDollarDao
 
-@Database(entities = [DollarEntity::class], version = 2)
+@Database(entities = [DollarEntity::class], version = 3)
 abstract class AppRoomDatabase : RoomDatabase() {
     abstract fun dollarDao(): IDollarDao
 

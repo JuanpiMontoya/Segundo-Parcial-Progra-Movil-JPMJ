@@ -9,6 +9,10 @@ import com.google.firebase.database.database
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class RealTimeRemoteDataSource {
     suspend fun getDollarUpdates(): Flow<DollarModel> = callbackFlow {
@@ -23,13 +27,17 @@ class RealTimeRemoteDataSource {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val value = snapshot.getValue(DollarModel::class.java)
                 if (value != null) {
-                    trySend(value)
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                    dateFormat.timeZone = TimeZone.getTimeZone("America/La_Paz")
+                    val currentTime = dateFormat.format(Date())
+
+                    val updatedValue = value.copy(fechaActualizacion = currentTime)
+                    trySend(updatedValue)
                 } else {
-                    trySend(DollarModel("", "", "", ""))
+                    trySend(DollarModel("", "", "", "", ""))
                 }
             }
         }
-
         myRef.addValueEventListener(callback)
         awaitClose { myRef.removeEventListener(callback) }
     }

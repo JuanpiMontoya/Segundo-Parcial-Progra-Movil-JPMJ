@@ -8,7 +8,8 @@ fun DollarEntity.toModel(): DollarModel {
         dollarOfficial = dollarOfficial,
         dollarParallel = dollarParallel,
         USDT = USDT,
-        USDC = USDC
+        USDC = USDC,
+        fechaActualizacion = fechaActualizacion
     )
 }
 
@@ -18,6 +19,7 @@ fun DollarModel.toEntity() : DollarEntity {
         dollarOfficial = dollarOfficial,
         dollarParallel = dollarParallel,
         USDT = USDT,
-        USDC = USDC
+        USDC = USDC,
+        fechaActualizacion = fechaActualizacion
     )
 }

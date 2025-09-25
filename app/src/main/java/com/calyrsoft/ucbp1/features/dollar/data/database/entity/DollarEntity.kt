@@ -13,7 +13,8 @@ data class DollarEntity(
     @ColumnInfo(name = "dollar_parallel") var dollarParallel: String? = null,
     @ColumnInfo(name = "USDT") var USDT: String? = null,
     @ColumnInfo(name = "USDC") var USDC: String? = null,
-    @ColumnInfo(name = "timestamp") var timestamp: Long = 0
+    @ColumnInfo(name = "timestamp") var timestamp: Long = 0,
+    @ColumnInfo(name = "fecha_actualizacion") var fechaActualizacion: String? = null
 ) {
 
     fun toModel(): DollarModel {
@@ -21,7 +22,8 @@ data class DollarEntity(
             dollarOfficial = dollarOfficial.orEmpty(),
             dollarParallel = dollarParallel.orEmpty(),
             USDT = USDT.orEmpty(),
-            USDC = USDC.orEmpty()
+            USDC = USDC.orEmpty(),
+            fechaActualizacion = fechaActualizacion.orEmpty()
         )
     }
 }
