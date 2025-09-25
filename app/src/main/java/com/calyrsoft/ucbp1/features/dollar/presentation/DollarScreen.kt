@@ -1,9 +1,11 @@
 package com.calyrsoft.ucbp1.features.dollar.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,15 +37,47 @@ fun DollarScreen(viewModelDollar: DollarViewModel = koinViewModel()) {
             }
             is DollarViewModel.DollarUIState.Success -> {
                 Text(
-                    text = "Actualizado: ${stateValue.data.fechaActualizacion ?: "Fecha no disponible"}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray,
+                    text = "Tipos de Cambio",
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
-                Text("USD Oficial: ${stateValue.data.dollarOfficial ?: "No disponible"}")
-                Text("USD Paralelo: ${stateValue.data.dollarParallel ?: "No disponible"}")
-                Text("USDT: ${stateValue.data.USDT ?: "No disponible"}")
-                Text("USDC: ${stateValue.data.USDC ?: "No disponible"}")
+                Text(
+                    text = "Actualizado: ${stateValue.data.fechaActualizacion ?: "N/A"}",
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 20.dp)
+                )
+                Text(
+                    text = "🏦 Dolar Oficial: ${stateValue.data.dollarOfficial ?: "No disponible"} Bs.",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(Color.Green.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                )
+                Text(
+                    text = "💰 Dolar Paralelo: ${stateValue.data.dollarParallel ?: "No disponible"} Bs.",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(Color.Yellow.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                )
+                Text(
+                    text = "₮ USDT: ${stateValue.data.USDT ?: "No disponible"} Bs.",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(Color.Magenta.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                )
+                Text(
+                    text = "🔵 USDC: ${stateValue.data.USDC ?: "No disponible"} Bs.",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .background(Color.Blue.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                )
             }
         }
     }
