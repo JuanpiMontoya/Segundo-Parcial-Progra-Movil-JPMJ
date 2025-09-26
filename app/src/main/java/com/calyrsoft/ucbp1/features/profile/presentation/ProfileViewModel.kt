@@ -1,67 +1,43 @@
 package com.calyrsoft.ucbp1.features.profile.presentation
 
 import androidx.lifecycle.ViewModel
-import com.calyrsoft.ucbp1.features.login.domain.model.LoginUserModel
-import com.calyrsoft.ucbp1.features.login.domain.usecase.FindByNameUseCase
-import com.calyrsoft.ucbp1.features.profile.domain.usecase.UpdateUserProfileUseCase
+import androidx.lifecycle.viewModelScope
+import com.calyrsoft.ucbp1.features.profile.domain.model.ProfileModel
+import com.calyrsoft.ucbp1.features.profile.domain.usecase.GetProfileUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val findByNameUseCase: FindByNameUseCase,
-    private val updateUserProfileUseCase: UpdateUserProfileUseCase
+    val profileUseCase: GetProfileUseCase
 ) : ViewModel() {
-
-    sealed class ProfileStateUI {
-        object Init : ProfileStateUI()
-        object Loading : ProfileStateUI() //
-        object Updating : ProfileStateUI()
-        data class UpdateSuccess(val user: LoginUserModel) : ProfileStateUI()
-        class UpdateError(val message: String) : ProfileStateUI()//
-
-        class DataLoaded(val user: LoginUserModel) : ProfileStateUI() //
+    // UI STATE
+    sealed class ProfileUiState {
+        object Init : ProfileUiState()
+        object Loading : ProfileUiState()
+        class Error(val message: String) : ProfileUiState()
+        class Success(val profile: ProfileModel) : ProfileUiState()
     }
 
-    private val _state = MutableStateFlow<ProfileStateUI>(ProfileStateUI.Init)
-    val state: StateFlow<ProfileStateUI> = _state.asStateFlow()
+    // Variable mutable y observable
+    private var _state = MutableStateFlow<ProfileUiState>(ProfileUiState.Init)
+    val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
-    fun loadProfile(userId: String) {
-
-            _state.value = ProfileStateUI.Loading
-
-            val result = findByNameUseCase.invoke(userId)
-            result.fold(
-                onSuccess = { user ->
-                    _state.value = ProfileStateUI.DataLoaded(user)
+    // Evento desencadenador
+    fun showProfile() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value = ProfileUiState.Loading
+            val resultProfile = profileUseCase.invoke()
+            resultProfile.fold(
+                onSuccess = {
+                    _state.value = ProfileUiState.Success(it)
                 },
-
-                onFailure = { error ->
-                    _state.value = ProfileStateUI.UpdateError(error.message ?: "Error al cargar perfil")
+                onFailure = {
+                    _state.value = ProfileUiState.Error(it.message ?: "Error desconocido")
                 }
             )
-
-    }
-
-    fun updateProfile(name: String,
-                      newName: String? = null,
-                      newPhone: String? = null,
-                      newImageUrl: String? = null,
-                      newPassword: String? = null) {
-
-            _state.value = ProfileStateUI.Updating
-
-            val result = updateUserProfileUseCase.invoke(name, newName, newPhone, newImageUrl, newPassword)
-
-            result.fold(
-                onSuccess = { updatedUser ->
-                    _state.value = ProfileStateUI.UpdateSuccess(updatedUser)
-                },
-                onFailure = { error ->
-                    _state.value =
-                        ProfileStateUI.UpdateError(error.message ?: "Error al actualizar nombre")
-                }
-            )
-
+        }
     }
 }

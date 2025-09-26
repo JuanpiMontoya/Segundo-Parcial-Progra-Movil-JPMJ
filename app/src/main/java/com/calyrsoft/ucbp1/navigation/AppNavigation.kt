@@ -66,20 +66,14 @@ fun AppNavigation(modifier: Modifier){
 
 
             ProfileScreen(
-                modifier = modifier,
-                name = name,
-                vm = koinViewModel(),
-
+                modifier = Modifier,
+                name = "Nombre del usuario",
+                profileViewModel = koinViewModel(),
                 onEndSession = {
-                    navController.navigate(
-                        "login"
-                    )
+                    navController.navigate("login")
                 },
-
                 onAskExchangeRate = {
-                    navController.navigate(
-                        "exchangeRate"
-                    )
+                    navController.navigate("exchangeRate")
                 }
             )
         }

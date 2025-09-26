@@ -89,6 +89,11 @@ dependencies {
     implementation(libs.firebase.messaging)
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
+    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 detekt {
