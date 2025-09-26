@@ -39,6 +39,8 @@ import com.calyrsoft.ucbp1.features.exchange.presentation.ExchangeRateViewModel
 import com.calyrsoft.ucbp1.features.profile.presentation.ForgotPasswordViewModel
 import com.calyrsoft.ucbp1.features.github.presentation.GithubViewModel
 import com.calyrsoft.ucbp1.features.login.presentation.LoginViewModel
+import com.calyrsoft.ucbp1.features.movie.data.database.MoviesRoomDatabase
+import com.calyrsoft.ucbp1.features.movie.data.datasource.MoviesLocalDataSource
 import com.calyrsoft.ucbp1.features.movie.presentation.MoviesViewModel
 import com.calyrsoft.ucbp1.features.post.presentation.PostsViewModel
 import com.calyrsoft.ucbp1.features.profile.presentation.ProfileViewModel
@@ -115,19 +117,23 @@ val appModule = module {
     single { RealTimeRemoteDataSource() }
 
     single { DollarLocalDataSource(get()) }
+    single { MoviesLocalDataSource(get()) }
 
     // Repositorios
     single<IGithubRepository>{ GithubRepository(get()) }
     single<ILoginRepository> { LoginRepository() }
     single<IExchangeRateRepository> { ExchangeRateRepository() }
     single<IWhatsappRepository> { WhatsappRepository() }
-    single<IMoviesRepository> { MoviesRepository(get()) }
+    single<IMoviesRepository> { MoviesRepository(get(), get()) }
     single<IPostsRepository> { PostsRepository(get()) }
     single<IDollarRepository> { DollarRepository(get(), get()) }
 
 
     single { AppRoomDatabase.getDatabase(get()) }
     single { get<AppRoomDatabase>().dollarDao() }
+
+    single { MoviesRoomDatabase.getDatabase(get()) }
+    single { get<MoviesRoomDatabase>().movieDao() }
 
 
     //Use Cases

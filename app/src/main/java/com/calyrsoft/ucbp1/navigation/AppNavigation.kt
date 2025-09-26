@@ -25,7 +25,7 @@ fun AppNavigation(modifier: Modifier){
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Dollar.route,
+        startDestination = Screen.MoviesScreen.route,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
